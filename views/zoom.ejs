@@ -5,9 +5,73 @@
   <title>Zoom meeting</title>
   <!-- cssファイル読み込み -->
   <link rel="stylesheet" href="style.css">
+  <!-- アイコン読み込み -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
 </head>
 
 <body>
-  <h1>Zoomミーティング</h1>
+  <div id="app">
+    <div id="container">
+      <div id="main">
+        <!-- ビデオ描画エリア -->
+        <div id="video">
+          <!-- 後で追加 -->
+        </div>
+        <div id="menu">
+          <div style="display: flex;">
+            <!-- マイクアイコン描画エリア -->
+            <div class="menu_item">
+              <div>
+                <i class="fa fa-2x fa-microphone"></i>
+                <i class="fa fa-2x fa-microphone-slash"></i>
+              </div>
+              <div>
+                <span>ミュート</span>
+                <span>アンミュート</span>
+              </div>
+            </div>
+            <!-- ビデオアイコン描画エリア -->
+            <div class="menu_item">
+              <div>
+                <i class="fa fa-2x fa-video"></i>
+                <i class="fa fa-2x fa-video-slash"></i>
+              </div>
+              <div>
+                <span>ビデオの停止</span>
+                <span>ビデオの開始</span>
+              </div>
+            </div>            
+          </div>
+          <div>
+            <button class="end">終了</button>
+          </div>
+        </div>
+      </div>
+      <div id="sub">
+        <!-- 参加者描画エリア -->
+        <div id="participate">
+          <p class="sub_list">参加者</p>
+            <div class="message_wrap">
+              <p><!-- 後で追加 --></p>
+            </div>
+        </div>
+        <!-- チャット描画エリア -->
+        <div id="chat">
+          <p class="sub_list">チャット</p>
+            <div class="message_wrap">
+              <p><!-- 後で追加 --></p>
+            </div>
+            <div>
+              <div>
+                <textarea class="text_area" placeholder="メッセージを入力します"></textarea>
+              </div>
+              <div>
+                <button class="btn">メッセージ送信</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

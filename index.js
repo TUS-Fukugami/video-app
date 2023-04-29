@@ -9,6 +9,7 @@ const port = 3000
 app.set('view engine', 'ejs');
 
 // expressサーバからpublicフォルダにアクセスできるようにする
+
 app.use(express.static('public'));
 
 // ルーティング処理

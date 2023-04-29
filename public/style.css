@@ -3,3 +3,108 @@
     padding: 0;
     box-sizing: border-box;
 }
+body {
+  height: 100vh;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#title {
+  font-size: 1em;
+  padding: 0.2em;
+  flex-basis: 30px;
+}
+#container {
+  display: flex;
+  flex-grow: 1;
+}
+#main {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+#video {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+#video > video {
+  width: 30%;
+  color: black;
+  background-color: white;
+  margin: 5px;
+}
+#menu {
+  background-color: rgb(97, 97, 97);
+  display: flex;
+  /* margin: 10px; */
+  justify-content: space-between;
+}
+.menu_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+#sub {
+  flex-basis: 300px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+.sub_list {
+  font-weight: 900;
+  text-align: center;
+}
+#participate {
+  flex: 1;
+}
+#chat {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll; /* ボタン含め、チャット全体がスクロールできるようになる。必要？？*/
+}
+.message_wrap {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+.text_area {
+  padding: 5px;
+  width: 100%;
+}
+.btn {
+  padding: 0.5em;
+  margin: 2px;
+}
+
+#join {
+  display: flex;
+  justify-content: center;
+}
+
+.select_room {
+  margin: 5px 0;
+}
+
+input {
+  width: 100%;
+  padding: 0.5em;
+}
+
+.end {
+  font-weight: bold;
+  color: white;
+  background-color: red;
+  padding: 0.8em 2em;
+  margin: 6px;
+}
