@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="style.css">
   <!-- アイコン読み込み -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+  <!-- Vue読み込み -->
+  <script src="https://unpkg.com/vue@next" defer></script>
 </head>
 
 <body>
@@ -63,10 +65,11 @@
             </div>
             <div>
               <div>
-                <textarea class="text_area" placeholder="メッセージを入力します"></textarea>
+                <textarea class="text_area" placeholder="メッセージを入力します" v-model="message"></textarea>
               </div>
               <div>
-                <button class="btn">メッセージ送信</button>
+                <!-- クリックすると、sendMessageメソッドを実行するイベント -->
+                <button class="btn" @click="sendMessage">メッセージ送信</button>
               </div>
             </div>
         </div>
