@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>Zoom meeting</title>
@@ -7,6 +8,10 @@
   <link rel="stylesheet" href="style.css">
   <!-- アイコン読み込み -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+  <!-- socketファイル読み込み -->
+  <script src="/socket.io/socket.io.js" defer></script>
+  <!-- app.js読み込み -->
+  <script src="app.js" defer></script>
   <!-- Vue読み込み -->
   <script src="https://unpkg.com/vue@next" defer></script>
 </head>
@@ -42,7 +47,7 @@
                 <span>ビデオの停止</span>
                 <span>ビデオの開始</span>
               </div>
-            </div>            
+            </div>
           </div>
           <div>
             <button class="end">終了</button>
@@ -53,28 +58,29 @@
         <!-- 参加者描画エリア -->
         <div id="participate">
           <p class="sub_list">参加者</p>
-            <div class="message_wrap">
-              <p><!-- 後で追加 --></p>
-            </div>
+          <div class="message_wrap">
+            <p><!-- 後で追加 --></p>
+          </div>
         </div>
         <!-- チャット描画エリア -->
         <div id="chat">
           <p class="sub_list">チャット</p>
-            <div class="message_wrap">
-              <p><!-- 後で追加 --></p>
+          <div class="message_wrap">
+            <p><!-- 後で追加 --></p>
+          </div>
+          <div>
+            <div>
+              <textarea class="text_area" placeholder="メッセージを入力します" v-model="message"></textarea>
             </div>
             <div>
-              <div>
-                <textarea class="text_area" placeholder="メッセージを入力します" v-model="message"></textarea>
-              </div>
-              <div>
-                <!-- クリックすると、sendMessageメソッドを実行するイベント -->
-                <button class="btn" @click="sendMessage">メッセージ送信</button>
-              </div>
+              <!-- クリックすると、sendMessageメソッドを実行するイベント -->
+              <button class="btn" @click="sendMessage">メッセージ送信</button>
             </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </body>
+
 </html>
