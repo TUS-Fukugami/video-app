@@ -9,7 +9,6 @@ const port = 3000
 app.set('view engine', 'ejs');
 
 // expressサーバからpublicフォルダにアクセスできるようにする
-
 app.use(express.static('public'));
 
 // ルーティング処理
@@ -22,11 +21,11 @@ app.get('/zoom', (req, res) => {
 });
 
 // connectionイベント(ブラウザからアクセス)があったときの処理
-io.on('connection', (socket => {
+io.on('connection', (socket) => {
     console.log('ユーザが接続しました');
-}))
+})
 
 // port3000番号で起動
-app.listen(port, () => {
+server.listen(port, () => {
     console.log('listening on *:3000');
 })
