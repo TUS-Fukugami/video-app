@@ -23,6 +23,12 @@ app.get('/zoom', (req, res) => {
 // connectionイベント(ブラウザからアクセス)があったときの処理
 io.on('connection', (socket) => {
     console.log('ユーザが接続しました');
+    // messageイベントを受信した場合
+    socket.on('message', (msg) => {
+        console.log("jusin")
+        // 全ブラウザに送信
+        io.emit('message', msg)
+    })
 })
 
 // port3000番号で起動
