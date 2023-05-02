@@ -22,10 +22,16 @@ app.get('/zoom', (req, res) => {
 
 // connectionイベント(ブラウザからアクセス)があったときの処理
 io.on('connection', (socket) => {
-    console.log('ユーザが接続しました');
+    console.log('a user connected');
+
+    // 新たに接続してきたブラウザのみにメッセージを送信
+    socket.emit('message', 'Zoomクローンにようこそ');
+
+    // アクセスを行ったブラウザ以外にメッセージを送信
+    socket.broadcast.emit('message', '新しいユーザが接続されました。');
+
     // messageイベントを受信した場合
     socket.on('message', (msg) => {
-        console.log("jusin")
         // 全ブラウザに送信
         io.emit('message', msg)
     })
