@@ -29,6 +29,11 @@ io.on('connection', (socket) => {
         // 全ブラウザに送信
         io.emit('message', msg)
     })
+
+    // 接続が切れた場合
+    socket.on('disconnect', () => {
+        io.emit('message', 'ユーザからの接続が切れました。')
+    });
 })
 
 // port3000番号で起動
