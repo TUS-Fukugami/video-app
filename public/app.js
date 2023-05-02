@@ -3,7 +3,9 @@ const socket = io();
 
 const app = Vue.createApp({
   data() {
-    message: "";
+    return {
+      message: "",
+    };
   },
   methods: {
     // message送信のメソッド
@@ -19,4 +21,4 @@ const app = Vue.createApp({
       console.log("message: " + msg);
     });
   },
-});
+}).mount("#app");
