@@ -5,6 +5,8 @@ const app = Vue.createApp({
   data() {
     return {
       message: "",
+      // メッセージリスト化のために
+      messages: [],
     };
   },
   methods: {
@@ -18,7 +20,8 @@ const app = Vue.createApp({
   mounted() {
     // サーバから送信されたmessageを受け取る
     socket.on("message", (msg) => {
-      console.log("message: " + msg);
+      // 配列にメッセージを追加
+      this.messages.push(msg);
     });
   },
 }).mount("#app");
