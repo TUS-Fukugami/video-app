@@ -29,6 +29,7 @@ const app = Vue.createApp({
       socket.open();
       socket.emit("join-room", this.roomID, this.name);
     },
+    // 退室時の初期化
     leaveRoom() {
       this.roomId = "";
       this.name = "";
