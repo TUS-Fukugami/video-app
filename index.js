@@ -46,8 +46,10 @@ io.on("connection", (socket) => {
 
   // 2.messageイベントを受信した場合
   socket.on("message", (msg) => {
-    // 全ブラウザに送信
-    io.emit("message", msg);
+    // 同じroomにいるブラウザにのみ送信
+    const room = rooms.find(room => room.id == socket.id)
+    if (room)
+      io.in(room.roomId).emit('message', `${room.name}: ${msg}`)
   });
 
   // 3.接続が切れた場合
