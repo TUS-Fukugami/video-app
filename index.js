@@ -59,6 +59,18 @@ io.on("connection", (socket) => {
   // 3.接続が切れた場合
   socket.on("disconnect", () => {
     io.emit("message", "ユーザからの接続が切れました。");
+
+    // 対応するユーザ情報を削除
+    const room = rooms.find(room => room.id == socket.id);
+    const index = rooms.findIndex(room => room.id == socket.id);
+    if (index !== -1) rooms.splice(index, 1);
+
+    // membersの更新
+    if (room) {
+      io.in(room.roomId).emit('message', `Bot :${room.name}が退出しました`);
+      const members = rooms.filter(rm => rm.roomId == room.roomId);
+      io.in(room.roomId).emit('members', members);
+    }
   });
 });
 
