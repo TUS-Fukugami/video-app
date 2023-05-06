@@ -5,6 +5,8 @@ const io = require("socket.io")(server);
 
 const port = 3000;
 
+const rooms = [];
+
 // ejsをexpressで利用できるようにejsを指定
 app.set("view engine", "ejs");
 
@@ -30,13 +32,25 @@ io.on("connection", (socket) => {
   // アクセスを行ったブラウザ以外にメッセージを送信
   socket.broadcast.emit("message", "新しいユーザが接続されました。");
 
-  // messageイベントを受信した場合
+  // 1.join-roomイベントを受信した場合(roomに参加者が入ったとき)
+  socket.on('join-room', (roomId, name) => {
+    rooms.push({
+      roomId,
+      name,
+      id: socket.id,
+    })
+    socket.join(roomId);
+    socket.emit('message', `Bot: ${name}さん、zoomクローンにようこそ!`);
+    socket.broadcast.in(roomId).emit('message', `${name}さんが接続しました`)
+  })
+
+  // 2.messageイベントを受信した場合
   socket.on("message", (msg) => {
     // 全ブラウザに送信
     io.emit("message", msg);
   });
 
-  // 接続が切れた場合
+  // 3.接続が切れた場合
   socket.on("disconnect", () => {
     io.emit("message", "ユーザからの接続が切れました。");
   });
