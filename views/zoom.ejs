@@ -18,7 +18,21 @@
 
 <body>
   <div id="app">
-    <div id="container">
+    <h1 id="title">Zoomミーティング</h1>
+    <!-- roomIdが空であればRoom選択画面を表示 -->
+    <div id="join" v-if="!roomId">
+      <div style="width:25%">
+        <h2>ルームの選択</h2>
+        <div>
+          <input v-model="name" placeholder="ユーザ名を入力してください" required/>
+        </div>
+        <div>
+          <button @click="joinRoom('room_1')" class="btn">Room 1</button>
+          <button @click="joinRoom('room_2')" class="btn">Room 2</button>
+        </div>
+      </div>
+    </div>
+    <div id="container" v-else>
       <div id="main">
         <!-- ビデオ描画エリア -->
         <div id="video">
