@@ -7,11 +7,13 @@ const app = Vue.createApp({
   data() {
     return {
       message: "",
-      // メッセージリスト化のために
+      // メッセージリスト化のため
       messages: [],
       // ユーザ名とルーム番号
       name: "",
       roomID: "",
+      // メンバーリスト
+      members: [],
     };
   },
   methods: {
@@ -33,6 +35,10 @@ const app = Vue.createApp({
     socket.on("message", (msg) => {
       // 配列にメッセージを追加
       this.messages.push(msg);
+    });
+    // membersにサーバから受信されたメンバーリストを追加
+    socket.on("members", (members) => {
+      this.members = members;
     });
   },
 }).mount("#app");
