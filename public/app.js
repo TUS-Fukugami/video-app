@@ -1,5 +1,7 @@
-// サーバと接続開始
-const socket = io();
+// サーバと接続 (joinしたら接続開始)
+const socket = io({
+  autoConnect: false,
+});
 
 const app = Vue.createApp({
   data() {
@@ -7,6 +9,9 @@ const app = Vue.createApp({
       message: "",
       // メッセージリスト化のために
       messages: [],
+      // ユーザ名とルーム番号
+      name: "",
+      roomID: "",
     };
   },
   methods: {
@@ -15,6 +20,12 @@ const app = Vue.createApp({
       // サーバへmessageを送信
       socket.emit("message", this.message);
       this.message = "";
+    },
+    // ルームに参加するメソッド
+    joinRoom(roomID) {
+      this.roomID = roomID;
+      socket.open();
+      socket.emit("join-room", this.roomID, this.name);
     },
   },
   mounted() {
