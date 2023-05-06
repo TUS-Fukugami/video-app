@@ -2,13 +2,21 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
+const { ExpressPeerServer } = require("peer");
 
 const port = 3000;
+
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+})
 
 const rooms = [];
 
 // ejsをexpressで利用できるようにejsを指定
 app.set("view engine", "ejs");
+
+// expressサーバにpeerサーバを統合
+app.use('/peerjs', peerServer);
 
 // expressサーバからpublicフォルダにアクセスできるようにする
 app.use(express.static("public"));
