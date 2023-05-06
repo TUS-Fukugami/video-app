@@ -58,8 +58,6 @@ io.on("connection", (socket) => {
 
   // 3.接続が切れた場合
   socket.on("disconnect", () => {
-    io.emit("message", "ユーザからの接続が切れました。");
-
     // 対応するユーザ情報を削除
     const room = rooms.find(room => room.id == socket.id);
     const index = rooms.findIndex(room => room.id == socket.id);
