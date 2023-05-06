@@ -29,6 +29,13 @@ const app = Vue.createApp({
       socket.open();
       socket.emit("join-room", this.roomID, this.name);
     },
+    leaveRoom() {
+      this.roomId = "";
+      this.name = "";
+      this.messages = [];
+      this.members = [];
+      socket.close();
+    },
   },
   mounted() {
     // サーバから送信されたmessageを受け取る
