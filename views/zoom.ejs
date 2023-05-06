@@ -73,7 +73,7 @@
         <div id="participate">
           <p class="sub_list">参加者</p>
           <div class="message_wrap">
-            <p><!-- 後で追加 --></p>
+            <p v-for="(member,index) in members" :key="index">{{ member.name }}</p>
           </div>
         </div>
         <!-- チャット描画エリア -->
