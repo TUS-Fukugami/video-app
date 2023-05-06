@@ -8,14 +8,14 @@ const port = 3000;
 
 const peerServer = ExpressPeerServer(server, {
   debug: true,
-})
+});
 
 const rooms = [];
 
 // ejsをexpressで利用できるようにejsを指定
 app.set("view engine", "ejs");
 
-// expressサーバにpeerサーバを統合
+// パス/peerjsにpeerServerをマウント
 app.use('/peerjs', peerServer);
 
 // expressサーバからpublicフォルダにアクセスできるようにする
@@ -41,15 +41,19 @@ io.on("connection", (socket) => {
   socket.broadcast.emit("message", "新しいユーザが接続されました。");
 
   // 1.join-roomイベントを受信した場合(roomに参加者が入ったとき)
-  socket.on('join-room', (roomId, name) => {
+  socket.on('join-room', (roomId, name, peerId) => {
     rooms.push({
       roomId,
       name,
       id: socket.id,
+      peerId,
     })
     socket.join(roomId);
     socket.emit('message', `Bot: ${name}さん、zoomクローンにようこそ!`);
     socket.broadcast.in(roomId).emit('message', `${name}さんが接続しました`);
+
+    // user-connectedイベントを部屋内の全ブラウザに送信
+    socket.broadcast.in(roomId).emit('user-connected', peerId, socket.id);
 
     //membersイベント送信
     const members = rooms.filter(room => room.roomId == roomId);
