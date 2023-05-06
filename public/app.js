@@ -11,7 +11,7 @@ const app = Vue.createApp({
       messages: [],
       // ユーザ名とルーム番号
       name: "",
-      roomID: "",
+      roomId: "",
       // メンバーリスト
       members: [],
     };
@@ -24,10 +24,10 @@ const app = Vue.createApp({
       this.message = "";
     },
     // ルームに参加するメソッド
-    joinRoom(roomID) {
-      this.roomID = roomID;
+    joinRoom(roomId) {
+      this.roomId = roomId;
       socket.open();
-      socket.emit("join-room", this.roomID, this.name);
+      socket.emit("join-room", this.roomId, this.name);
     },
     // 退室時の初期化
     leaveRoom() {
