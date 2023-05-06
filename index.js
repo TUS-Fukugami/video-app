@@ -5,6 +5,8 @@ const io = require("socket.io")(server);
 
 const port = 3000;
 
+const rooms = [];
+
 // ejsをexpressで利用できるようにejsを指定
 app.set("view engine", "ejs");
 
@@ -30,15 +32,43 @@ io.on("connection", (socket) => {
   // アクセスを行ったブラウザ以外にメッセージを送信
   socket.broadcast.emit("message", "新しいユーザが接続されました。");
 
-  // messageイベントを受信した場合
-  socket.on("message", (msg) => {
-    // 全ブラウザに送信
-    io.emit("message", msg);
+  // 1.join-roomイベントを受信した場合(roomに参加者が入ったとき)
+  socket.on('join-room', (roomId, name) => {
+    rooms.push({
+      roomId,
+      name,
+      id: socket.id,
+    })
+    socket.join(roomId);
+    socket.emit('message', `Bot: ${name}さん、zoomクローンにようこそ!`);
+    socket.broadcast.in(roomId).emit('message', `${name}さんが接続しました`);
+
+    //membersイベント送信
+    const members = rooms.filter(room => room.roomId == roomId);
+    io.in(roomId).emit('members', members);
   });
 
-  // 接続が切れた場合
+  // 2.messageイベントを受信した場合
+  socket.on("message", (msg) => {
+    // 同じroomにいるブラウザにのみ送信
+    const room = rooms.find(room => room.id == socket.id);
+    if (room)
+      io.in(room.roomId).emit('message', `${room.name}: ${msg}`);
+  });
+
+  // 3.接続が切れた場合
   socket.on("disconnect", () => {
-    io.emit("message", "ユーザからの接続が切れました。");
+    // 対応するユーザ情報を削除
+    const room = rooms.find(room => room.id == socket.id);
+    const index = rooms.findIndex(room => room.id == socket.id);
+    if (index !== -1) rooms.splice(index, 1);
+
+    // membersの更新
+    if (room) {
+      io.in(room.roomId).emit('message', `Bot :${room.name}が退出しました`);
+      const members = rooms.filter(rm => rm.roomId == room.roomId);
+      io.in(room.roomId).emit('members', members);
+    }
   });
 });
 
