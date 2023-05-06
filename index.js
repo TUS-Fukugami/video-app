@@ -41,15 +41,19 @@ io.on("connection", (socket) => {
     })
     socket.join(roomId);
     socket.emit('message', `Bot: ${name}さん、zoomクローンにようこそ!`);
-    socket.broadcast.in(roomId).emit('message', `${name}さんが接続しました`)
-  })
+    socket.broadcast.in(roomId).emit('message', `${name}さんが接続しました`);
+
+    //membersイベント送信
+    const members = rooms.filter(room => room.roomId == roomId);
+    io.in(roomId).emit('members', members);
+  });
 
   // 2.messageイベントを受信した場合
   socket.on("message", (msg) => {
     // 同じroomにいるブラウザにのみ送信
-    const room = rooms.find(room => room.id == socket.id)
+    const room = rooms.find(room => room.id == socket.id);
     if (room)
-      io.in(room.roomId).emit('message', `${room.name}: ${msg}`)
+      io.in(room.roomId).emit('message', `${room.name}: ${msg}`);
   });
 
   // 3.接続が切れた場合
