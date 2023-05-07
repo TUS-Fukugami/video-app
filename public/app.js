@@ -14,6 +14,8 @@ const app = Vue.createApp({
       roomId: "",
       // メンバーリスト
       members: [],
+      // PeerJSのため
+      myPeer,
     };
   },
   methods: {
@@ -26,8 +28,18 @@ const app = Vue.createApp({
     // ルームに参加するメソッド
     joinRoom(roomId) {
       this.roomId = roomId;
+      // PeerJSのインスタンス生成
+      this.myPeer = new Peer(undefined, {
+        host: "/",
+        port: 3000,
+        path: "/peerjs",
+        debug: 3,
+      });
       socket.open();
-      socket.emit("join-room", this.roomId, this.name);
+      // PeerJSサーバに接続したらメッセージ送信
+      this.myPeer.on("open", (peerId) =>
+        socket.emit("join-room", this.roomId, this.name)
+      );
     },
     // 退室時の初期化
     leaveRoom() {
