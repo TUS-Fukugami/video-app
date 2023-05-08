@@ -15,7 +15,7 @@ const app = Vue.createApp({
       // メンバーリスト
       members: [],
       // PeerJSのため
-      myPeer,
+      myPeer: null,
     };
   },
   methods: {
