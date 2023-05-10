@@ -56,7 +56,27 @@ const app = Vue.createApp({
           this.myVideo.srcObject = stream;
           this.myVideo.play();
           this.$refs.video.append(this.myVideo);
-          console.dir(this);
+
+          // ビデオの送信
+          this.myPeer.on("call", (call) => {
+            const video = document.createElement("video");
+            call.answer(stream);
+            call.on("stream", (stream) => {
+              video.srcObject = stream;
+              video.play();
+              this.$refs.video.append(video);
+            });
+          });
+          // user-connectedイベントの処理
+          socket.on("user-connected", (peerId) => {
+            const call = this.myPeer.call(peerId, stream);
+            const video = document.createElement("video");
+            call.on("stream", (stream) => {
+              video.srcObject = stream;
+              video.play();
+              this.$refs.video.append(video);
+            });
+          });
         })
         .catch((e) => {
           console.log(e);
@@ -80,10 +100,6 @@ const app = Vue.createApp({
     // membersにサーバから受信されたメンバーリストを追加
     socket.on("members", (members) => {
       this.members = members;
-    });
-    // user-connectedイベントの処理
-    socket.on("user-connected", (peerId) => {
-      console.log(peerId);
     });
   },
 }).mount("#app");
