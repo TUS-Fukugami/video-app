@@ -3,6 +3,9 @@ const socket = io({
   autoConnect: false,
 });
 
+// ビデオの保存リスト
+const videos = [];
+
 const app = Vue.createApp({
   data() {
     return {
@@ -60,22 +63,46 @@ const app = Vue.createApp({
           // ビデオの送信
           this.myPeer.on("call", (call) => {
             const video = document.createElement("video");
+            // ビデオリストへプッシュ
+            videos.push({
+              video: video,
+              peerId: call.peer,
+            });
             call.answer(stream);
             call.on("stream", (stream) => {
               video.srcObject = stream;
               video.play();
               this.$refs.video.append(video);
             });
+            // Answerの方が実行
+            call.on("close", () => {
+              console.log("answerしたブラウザが退出");
+              video.remove();
+            });
           });
           // user-connectedイベントの処理
           socket.on("user-connected", (peerId) => {
             const call = this.myPeer.call(peerId, stream);
             const video = document.createElement("video");
+            // ビデオリストへプッシュ
+            videos.push({
+              video: video,
+              peerId: call.peer,
+            });
             call.on("stream", (stream) => {
               video.srcObject = stream;
               video.play();
               this.$refs.video.append(video);
             });
+            call.on("close", () => {
+              console.log("callしたブラウザで退出");
+              video.remove();
+            });
+          });
+          // 退出時の送信メッセージ
+          socket.on("user-disconnected", (peerId) => {
+            const video = videos.find((video) => video.peerId == peerId);
+            if (video) video.video.remove();
           });
         })
         .catch((e) => {
@@ -88,6 +115,8 @@ const app = Vue.createApp({
       this.name = "";
       this.messages = [];
       this.members = [];
+      // PeerJSの接続情報削除
+      this.myPeer.destroy();
       socket.close();
     },
   },
