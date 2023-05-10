@@ -15,7 +15,9 @@ const app = Vue.createApp({
       // メンバーリスト
       members: [],
       // PeerJSのため
-      myPeer: null,
+      myPeer: "",
+      // ビデオ情報
+      myVideo: "",
     };
   },
   methods: {
@@ -40,6 +42,25 @@ const app = Vue.createApp({
       this.myPeer.on("open", (peerId) => {
         socket.emit("join-room", this.roomId, this.name, peerId);
       });
+
+      // ビデオ要素作成、要素に映像データ設定
+      this.myVideo = document.createElement("video");
+      this.myVideo.muted = true;
+
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+          audio: false,
+        })
+        .then((stream) => {
+          this.myVideo.srcObject = stream;
+          this.myVideo.play();
+          this.$refs.video.append(this.myVideo);
+          console.dir(this);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     // 退室時の初期化
     leaveRoom() {
