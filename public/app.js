@@ -3,6 +3,9 @@ const socket = io({
   autoConnect: false,
 });
 
+// ビデオの保存リスト
+const videos = [];
+
 const app = Vue.createApp({
   data() {
     return {
@@ -15,7 +18,9 @@ const app = Vue.createApp({
       // メンバーリスト
       members: [],
       // PeerJSのため
-      myPeer: null,
+      myPeer: "",
+      // ビデオ情報
+      myVideo: "",
     };
   },
   methods: {
@@ -40,6 +45,69 @@ const app = Vue.createApp({
       this.myPeer.on("open", (peerId) => {
         socket.emit("join-room", this.roomId, this.name, peerId);
       });
+
+      // ビデオ要素作成、要素に映像データ設定
+      this.myVideo = document.createElement("video");
+      this.myVideo.muted = true;
+
+      navigator.mediaDevices
+        .getUserMedia({
+          video: true,
+          audio: false,
+        })
+        .then((stream) => {
+          this.myVideo.srcObject = stream;
+          this.myVideo.play();
+          this.$refs.video.append(this.myVideo);
+
+          // ビデオの送信
+          this.myPeer.on("call", (call) => {
+            const video = document.createElement("video");
+            // ビデオリストへプッシュ
+            videos.push({
+              video: video,
+              peerId: call.peer,
+            });
+            call.answer(stream);
+            call.on("stream", (stream) => {
+              video.srcObject = stream;
+              video.play();
+              this.$refs.video.append(video);
+            });
+            // Answerの方が実行
+            call.on("close", () => {
+              console.log("answerしたブラウザが退出");
+              video.remove();
+            });
+          });
+          // user-connectedイベントの処理
+          socket.on("user-connected", (peerId) => {
+            const call = this.myPeer.call(peerId, stream);
+            const video = document.createElement("video");
+            // ビデオリストへプッシュ
+            videos.push({
+              video: video,
+              peerId: call.peer,
+            });
+            call.on("stream", (stream) => {
+              video.srcObject = stream;
+              video.play();
+              this.$refs.video.append(video);
+            });
+            call.on("close", () => {
+              console.log("callしたブラウザで退出");
+              video.remove();
+            });
+          });
+          // 退出時の送信メッセージ
+          socket.on("user-disconnected", (peerId) => {
+            const video = videos.find((video) => video.peerId == peerId);
+            if (video) video.video.remove();
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     // 退室時の初期化
     leaveRoom() {
@@ -47,6 +115,8 @@ const app = Vue.createApp({
       this.name = "";
       this.messages = [];
       this.members = [];
+      // PeerJSの接続情報削除
+      this.myPeer.destroy();
       socket.close();
     },
   },
@@ -59,10 +129,6 @@ const app = Vue.createApp({
     // membersにサーバから受信されたメンバーリストを追加
     socket.on("members", (members) => {
       this.members = members;
-    });
-    // user-connectedイベントの処理
-    socket.on("user-connected", (peerId) => {
-      console.log(peerId);
     });
   },
 }).mount("#app");
