@@ -78,6 +78,7 @@ io.on("connection", (socket) => {
     // membersの更新
     if (room) {
       io.in(room.roomId).emit('message', `Bot :${room.name}が退出しました`);
+      socket.broadcast.in(room.roomId).emit('user-disconnected', room.peerId);
       const members = rooms.filter(rm => rm.roomId == room.roomId);
       io.in(room.roomId).emit('members', members);
     }
