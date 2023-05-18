@@ -44,23 +44,23 @@
             <!-- マイクアイコン描画エリア -->
             <div class="menu_item">
               <div>
-                <i class="fa fa-2x fa-microphone"></i>
-                <i class="fa fa-2x fa-microphone-slash"></i>
+                <i class="fa fa-2x fa-microphone" @click="stopAudio" v-if="!onMute"></i>
+                <i class="fa fa-2x fa-microphone-slash" @click="startAudio" v-else></i>
               </div>
               <div>
-                <span>ミュート</span>
-                <span>アンミュート</span>
+                <span v-if="!onMute">ミュート</span>
+                <span v-else>アンミュート</span>
               </div>
             </div>
             <!-- ビデオアイコン描画エリア -->
             <div class="menu_item">
               <div>
-                <i class="fa fa-2x fa-video"></i>
-                <i class="fa fa-2x fa-video-slash"></i>
+                <i class="fa fa-2x fa-video"  @click="stopVideo" v-if="onVideo"></i>
+                <i class="fa fa-2x fa-video-slash" @click="startVideo" v-else></i>
               </div>
               <div>
-                <span>ビデオの停止</span>
-                <span>ビデオの開始</span>
+                <span v-if="onVideo">ビデオの停止</span>
+                <span v-else>ビデオの開始</span>
               </div>
             </div>
           </div>
