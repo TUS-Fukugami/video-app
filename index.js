@@ -1,9 +1,8 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-//コンフリクト用ダミーコメント
-const { ExpressPeerServer } = require("peer");
 const io = require("socket.io")(server);
+const { ExpressPeerServer } = require("peer");
 
 const port = 3000;
 
