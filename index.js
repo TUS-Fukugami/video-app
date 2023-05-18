@@ -13,6 +13,8 @@ const peerServer = ExpressPeerServer(server, {
 
 const rooms = [];
 
+// コンフリクトテストコメント
+
 // ejsをexpressで利用できるようにejsを指定
 app.set("view engine", "ejs");
 
