@@ -69,15 +69,16 @@ const app = Vue.createApp({
               peerId: call.peer,
             });
             call.answer(stream);
-            call.on("stream", (stream) => {
-              video.srcObject = stream;
-              video.play();
-              this.$refs.video.append(video);
-            });
+            //コンフリクト用ダミーコメント
             // Answerの方が実行
             call.on("close", () => {
               console.log("answerしたブラウザが退出");
               video.remove();
+            });
+            call.on("stream", (stream) => {
+              video.srcObject = stream;
+              video.play();
+              this.$refs.video.append(video);
             });
           });
           // user-connectedイベントの処理
