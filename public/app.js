@@ -21,6 +21,10 @@ const app = Vue.createApp({
       myPeer: "",
       // ビデオ情報
       myVideo: "",
+      // ミュート、ビデオ停止
+      onVideo: true,
+      onMute: false,
+      myStream: "",
     };
   },
   methods: {
@@ -56,7 +60,8 @@ const app = Vue.createApp({
           audio: false,
         })
         .then((stream) => {
-          this.myVideo.srcObject = stream;
+          this.myStream = stream;
+          this.myVideo.srcObject = this.myStream;
           this.myVideo.play();
           this.$refs.video.append(this.myVideo);
 
@@ -118,6 +123,30 @@ const app = Vue.createApp({
       // PeerJSの接続情報削除
       this.myPeer.destroy();
       socket.close();
+    },
+    // ビデオスタートメソッド
+    startVideo() {
+      this.onVideo = true;
+      const tracks = this.myStream.getVideoTracks();
+      tracks[0].enabled = true;
+    },
+    // ビデオ停止メソッド
+    stopVideo() {
+      this.onVideo = false;
+      const tracks = this.myStream.getVideoTracks();
+      tracks[0].enabled = false;
+    },
+    // ミュート解除メソッド
+    startAudio() {
+      this.onMute = false;
+      const tracks = this.myStream.getVideoTracks();
+      tracks[0].mute = false;
+    },
+    // ミュート開始メソッド
+    stopAudio() {
+      this.onMute = true;
+      const tracks = this.myStream.getVideoTracks();
+      tracks[0].mute = true;
     },
   },
   mounted() {
