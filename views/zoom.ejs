@@ -38,8 +38,20 @@
             />
           </div>
           <div>
-            <button @click="joinRoom('room_1')" class="btn">Room 1</button>
-            <button @click="joinRoom('room_2')" class="btn">Room 2</button>
+            <button
+              @click="joinRoom('room_1')"
+              class="btn"
+              v-bind-diabled="name == ''"
+            >
+              Room 1
+            </button>
+            <button
+              @click="joinRoom('room_2')"
+              class="btn"
+              v-bind-diabled="name == ''"
+            >
+              Room 2
+            </button>
           </div>
         </div>
       </div>
